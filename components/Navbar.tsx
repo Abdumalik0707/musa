@@ -3,14 +3,36 @@
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { OPERATOR } from "@/lib/data";
+
+interface StoredUser {
+  name: string;
+  phone: string;
+  isAdmin?: boolean;
+}
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<StoredUser | null>(null);
+  const [dropOpen, setDropOpen] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const raw = localStorage.getItem("musa_user");
+      if (raw) setUser(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("musa_user");
+    setUser(null);
+    setDropOpen(false);
+    router.push("/");
+  }
 
   return (
     <nav
@@ -110,35 +132,134 @@ export function Navbar() {
             </button>
           )}
 
-          <Link
-            href="/auth/login"
-            style={{
-              fontSize: 14,
-              fontWeight: 600,
-              color: "var(--muted)",
-              textDecoration: "none",
-              padding: "8px 16px",
-              borderRadius: 20,
-              border: "1px solid var(--border)",
-            }}
-          >
-            Kirish
-          </Link>
+          {mounted && (
+            user ? (
+              /* Logged-in user avatar + dropdown */
+              <div style={{ position: "relative" }}>
+                <button
+                  onClick={() => setDropOpen(!dropOpen)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    padding: "7px 14px",
+                    borderRadius: 20,
+                    border: "1px solid var(--border)",
+                    background: "var(--surface-2)",
+                    cursor: "pointer",
+                    color: "var(--fg)",
+                    fontSize: 14,
+                    fontWeight: 600,
+                  }}
+                >
+                  <span style={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: "50%",
+                    background: "var(--accent)",
+                    color: "#fff",
+                    display: "grid",
+                    placeItems: "center",
+                    fontSize: 13,
+                    fontWeight: 800,
+                  }}>
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="hidden-mobile">{user.name}</span>
+                  <span style={{ fontSize: 10, opacity: 0.5 }}>▼</span>
+                </button>
 
-          <Link
-            href="/#mahsulotlar"
-            style={{
-              fontSize: 14,
-              fontWeight: 700,
-              background: "var(--accent)",
-              color: "#fff",
-              textDecoration: "none",
-              padding: "9px 20px",
-              borderRadius: 20,
-            }}
-          >
-            Buyurtma berish
-          </Link>
+                {dropOpen && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      top: "calc(100% + 8px)",
+                      background: "var(--surface)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 16,
+                      boxShadow: "var(--shadow)",
+                      minWidth: 180,
+                      padding: "8px",
+                      zIndex: 100,
+                    }}
+                  >
+                    <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border)", marginBottom: 4 }}>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: 0 }}>{user.name}</p>
+                      <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>{user.phone}</p>
+                    </div>
+                    {user.isAdmin && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setDropOpen(false)}
+                        style={{
+                          display: "block",
+                          padding: "8px 12px",
+                          borderRadius: 10,
+                          color: "var(--accent)",
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: "none",
+                        }}
+                      >
+                        ⚙️ Admin panel
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      style={{
+                        width: "100%",
+                        textAlign: "left",
+                        padding: "8px 12px",
+                        borderRadius: 10,
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "var(--red, #ef4444)",
+                        fontSize: 13,
+                        fontWeight: 600,
+                      }}
+                    >
+                      🚪 Chiqish
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Not logged in */
+              <>
+                <Link
+                  href="/auth/login"
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: "var(--muted)",
+                    textDecoration: "none",
+                    padding: "8px 16px",
+                    borderRadius: 20,
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  Kirish
+                </Link>
+
+                <Link
+                  href="/auth/register"
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    background: "var(--accent)",
+                    color: "#fff",
+                    textDecoration: "none",
+                    padding: "9px 20px",
+                    borderRadius: 20,
+                  }}
+                >
+                  Ro&apos;yxatdan o&apos;tish
+                </Link>
+              </>
+            )
+          )}
         </div>
       </div>
 
