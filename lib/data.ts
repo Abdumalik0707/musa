@@ -20,6 +20,7 @@ export interface Product {
   tags: string[];
   isNew?: boolean;
   isPremium?: boolean;
+  minOrder?: number;
 }
 
 export const PRODUCTS: Product[] = [

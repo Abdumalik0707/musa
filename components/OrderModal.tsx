@@ -20,7 +20,7 @@ interface Props {
 }
 
 export function OrderModal({ product, onClose, user }: Props) {
-  const [qty, setQty] = useState(product.minOrder);
+  const [qty, setQty] = useState(product.minOrder ?? 1);
   const [name, setName] = useState(user?.name || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [customerType, setCustomerType] = useState<"individual" | "shop">(
@@ -36,7 +36,7 @@ export function OrderModal({ product, onClose, user }: Props) {
     return () => { document.body.style.overflow = ""; };
   }, []);
 
-  const total = product.price * qty;
+  const total = product.price * (qty ?? 1);
 
   async function handleSubmit() {
     if (!location) { setStep("map"); return; }
@@ -245,7 +245,7 @@ export function OrderModal({ product, onClose, user }: Props) {
                   <label style={labelStyle}>Miqdor ({product.unit})</label>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <button
-                      onClick={() => setQty(Math.max(product.minOrder, qty - 1))}
+                      onClick={() => setQty(Math.max(product.minOrder ?? 1, (qty ?? 1) - 1))}
                       style={qtyBtnStyle}
                     >
                       −
@@ -253,7 +253,7 @@ export function OrderModal({ product, onClose, user }: Props) {
                     <span style={{ fontSize: 20, fontWeight: 700, color: "var(--fg)", minWidth: 32, textAlign: "center" }}>
                       {qty}
                     </span>
-                    <button onClick={() => setQty(qty + 1)} style={qtyBtnStyle}>+</button>
+                    <button onClick={() => setQty((qty ?? 1) + 1)} style={qtyBtnStyle}>+</button>
                     <span style={{ color: "var(--muted)", fontSize: 13 }}>{product.unit}</span>
                   </div>
                 </div>
