@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-  throw new Error("MONGODB_URI is not defined in .env.local");
-}
-
 declare global {
   // eslint-disable-next-line no-var
   var _mongooseConn: typeof mongoose | null;
@@ -17,6 +11,11 @@ let cached = global._mongooseConn;
 let promise = global._mongoosePromise;
 
 export async function connectDB() {
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI is not defined");
+  }
+
   if (cached) return cached;
 
   if (!promise) {
