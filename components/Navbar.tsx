@@ -57,31 +57,11 @@ export function Navbar() {
         }}
       >
         {/* Logo */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: "var(--accent)",
-              display: "grid",
-              placeItems: "center",
-              fontSize: 18,
-            }}
-          >
-            🍦
-          </div>
-          <span
-            style={{
-              fontFamily: "var(--font-jakarta)",
-              fontSize: 20,
-              fontWeight: 800,
-              color: "var(--fg)",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            Musa
-          </span>
+        <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <svg width="90" height="36" viewBox="0 0 90 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="90" height="36" rx="10" fill="#E8C96A"/>
+            <text x="45" y="25" textAnchor="middle" fontFamily="Arial Black, sans-serif" fontSize="18" fontWeight="900" fill="#1B3A6B" letterSpacing="2">MUSA</text>
+          </svg>
         </Link>
 
         {/* Desktop links */}
