@@ -46,14 +46,6 @@ export function OrderModal({ product, onClose, user }: Props) {
     setSubmitting(false);
   }
 
-  function openDriverMap() {
-    if (!location) return;
-    window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}`,
-      "_blank"
-    );
-  }
-
   return (
     <div
       onClick={onClose}
@@ -92,30 +84,8 @@ export function OrderModal({ product, onClose, user }: Props) {
               Buyurtma qabul qilindi!
             </h2>
             <p style={{ color: "var(--muted)", fontSize: 15, lineHeight: 1.6 }}>
-              Tez orada operator siz bilan bog&apos;lanadi.<br />
-              <strong style={{ color: "var(--accent)" }}>+998 90 123 45 67</strong>
+              Tez orada operator siz bilan bog&apos;lanadi.
             </p>
-            {location && (
-              <button
-                onClick={openDriverMap}
-                style={{
-                  marginTop: 20,
-                  padding: "12px 24px",
-                  borderRadius: 20,
-                  background: "#4285f4",
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 14,
-                  border: "none",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                🗺️ Google Maps orqali yo&apos;l ko&apos;rsatish
-              </button>
-            )}
             <button
               onClick={onClose}
               style={{
