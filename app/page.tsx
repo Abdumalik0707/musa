@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
 import { PRODUCTS, OPERATOR, type Category } from "@/lib/data";
@@ -14,10 +15,32 @@ const FILTER_TABS: { key: Filter; label: string; emoji: string }[] = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [category, setCategory] = useState<Filter>("barchasi");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ name: string; phone: string; type: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("musa_user");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      setIsLoggedIn(true);
+      setCurrentUser(parsed);
+    }
+    setLoading(false);
+  }, []);
 
   const filtered =
     category === "barchasi" ? PRODUCTS : PRODUCTS.filter((p) => p.category === category);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "var(--muted)", fontSize: 16 }}>Yuklanmoqda...</div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -147,41 +170,107 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Category tabs */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 36, flexWrap: "wrap" }}>
-          {FILTER_TABS.map(({ key, label, emoji }) => (
-            <button
-              key={key}
-              onClick={() => setCategory(key)}
+        {!isLoggedIn ? (
+          // Login qilmagan foydalanuvchilar uchun
+          <div
+            style={{
+              textAlign: "center",
+              padding: "80px 24px",
+              background: "var(--surface)",
+              borderRadius: 24,
+              border: "2px solid var(--border)",
+              maxWidth: 600,
+              margin: "0 auto",
+            }}
+          >
+            <div style={{ fontSize: 64, marginBottom: 20 }}>🔒</div>
+            <h3
               style={{
-                padding: "9px 18px",
-                borderRadius: 20,
-                border: `2px solid ${category === key ? "var(--accent)" : "var(--border)"}`,
-                background: category === key ? "var(--accent)" : "var(--surface)",
-                color: category === key ? "#fff" : "var(--muted)",
-                fontWeight: 600,
-                fontSize: 13,
-                cursor: "pointer",
-                transition: "all 0.2s",
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
+                fontFamily: "var(--font-jakarta)",
+                fontSize: 28,
+                fontWeight: 800,
+                color: "var(--fg)",
+                marginBottom: 12,
               }}
             >
-              <span>{emoji}</span> {label}
-              <span style={{ opacity: 0.7, fontSize: 11 }}>
-                ({key === "barchasi" ? PRODUCTS.length : PRODUCTS.filter((p) => p.category === key).length})
-              </span>
-            </button>
-          ))}
-        </div>
+              Mahsulotlarni ko&apos;rish uchun kirish kerak
+            </h3>
+            <p style={{ color: "var(--muted)", fontSize: 16, marginBottom: 32, lineHeight: 1.6 }}>
+              Mahsulotlar katalogini ko&apos;rish va buyurtma berish uchun akkauntingizga kiring yoki ro&apos;yxatdan o&apos;ting
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <button
+                onClick={() => router.push("/auth/login")}
+                style={{
+                  padding: "14px 32px",
+                  borderRadius: 20,
+                  background: "var(--accent)",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: 16,
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                🔑 Kirish
+              </button>
+              <button
+                onClick={() => router.push("/auth/register")}
+                style={{
+                  padding: "14px 32px",
+                  borderRadius: 20,
+                  background: "var(--surface-2)",
+                  color: "var(--fg)",
+                  fontWeight: 600,
+                  fontSize: 16,
+                  border: "1px solid var(--border-strong)",
+                  cursor: "pointer",
+                }}
+              >
+                📝 Ro&apos;yxatdan o&apos;tish
+              </button>
+            </div>
+          </div>
+        ) : (
+          // Login qilgan foydalanuvchilar uchun
+          <>
+            {/* Category tabs */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 36, flexWrap: "wrap" }}>
+              {FILTER_TABS.map(({ key, label, emoji }) => (
+                <button
+                  key={key}
+                  onClick={() => setCategory(key)}
+                  style={{
+                    padding: "9px 18px",
+                    borderRadius: 20,
+                    border: `2px solid ${category === key ? "var(--accent)" : "var(--border)"}`,
+                    background: category === key ? "var(--accent)" : "var(--surface)",
+                    color: category === key ? "#fff" : "var(--muted)",
+                    fontWeight: 600,
+                    fontSize: 13,
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                  }}
+                >
+                  <span>{emoji}</span> {label}
+                  <span style={{ opacity: 0.7, fontSize: 11 }}>
+                    ({key === "barchasi" ? PRODUCTS.length : PRODUCTS.filter((p) => p.category === key).length})
+                  </span>
+                </button>
+              ))}
+            </div>
 
-        {/* Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: 18 }}>
-          {filtered.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
+            {/* Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: 18 }}>
+              {filtered.map((p) => (
+                <ProductCard key={p.id} product={p} user={currentUser} />
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       {/* Operator CTA */}

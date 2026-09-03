@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getProductById, OPERATOR } from "@/lib/data";
@@ -13,6 +13,12 @@ export default function ProductPage() {
   const product = getProductById(id);
   const [activeImg, setActiveImg] = useState(0);
   const [ordering, setOrdering] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ name: string; phone: string; type: string } | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("musa_user");
+    if (stored) setCurrentUser(JSON.parse(stored));
+  }, []);
 
   if (!product) {
     return (
@@ -282,7 +288,7 @@ export default function ProductPage() {
 
       {/* Order modal */}
       {ordering && (
-        <OrderModal product={{ ...product, minOrder: 1 }} onClose={() => setOrdering(false)} />
+        <OrderModal product={{ ...product, minOrder: 1 }} onClose={() => setOrdering(false)} user={currentUser} />
       )}
 
       <style>{`
