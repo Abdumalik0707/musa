@@ -59,7 +59,7 @@ export default function ProductPage() {
               <img
                 src={product.images[activeImg] || product.image}
                 alt={product.name}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{ width: "100%", height: "100%", objectFit: "contain", padding: "16px" }}
               />
             </div>
 
@@ -82,7 +82,7 @@ export default function ProductPage() {
                     }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "contain", padding: "4px" }} />
                   </button>
                 ))}
               </div>

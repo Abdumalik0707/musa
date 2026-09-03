@@ -51,7 +51,7 @@ export function ProductCard({ product, user }: Props) {
               <img
                 src={product.image}
                 alt={product.name}
-                style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s" }}
+                style={{ width: "100%", height: "100%", objectFit: "contain", transition: "transform 0.3s", padding: "8px" }}
                 onMouseEnter={(e) => ((e.target as HTMLImageElement).style.transform = "scale(1.05)")}
                 onMouseLeave={(e) => ((e.target as HTMLImageElement).style.transform = "scale(1)")}
               />
