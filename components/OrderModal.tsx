@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { Product } from "@/lib/data";
+import { useLanguage } from "@/lib/i18n";
 
 const LocationMap = dynamic(() => import("./LocationMap").then((m) => m.LocationMap), {
   ssr: false,
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export function OrderModal({ product, onClose, user }: Props) {
+  const { t } = useLanguage();
   const [qty, setQty] = useState(product.minOrder ?? 1);
   const [name, setName] = useState(user?.name || "");
   const [phone, setPhone] = useState(user?.phone || "");
@@ -29,6 +31,7 @@ export function OrderModal({ product, onClose, user }: Props) {
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const [step, setStep] = useState<"info" | "map" | "confirm" | "done">("info");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   // Prevent body scroll
   useEffect(() => {
@@ -41,9 +44,38 @@ export function OrderModal({ product, onClose, user }: Props) {
   async function handleSubmit() {
     if (!location) { setStep("map"); return; }
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1200));
-    setStep("done");
-    setSubmitting(false);
+    setError("");
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: name || user?.name,
+          customerPhone: phone || user?.phone,
+          customerAddress: location.address,
+          customerLat: location.lat,
+          customerLng: location.lng,
+          customerType,
+          products: [
+            {
+              productId: product.id,
+              productName: product.name,
+              quantity: qty,
+              price: product.price,
+            },
+          ],
+          totalAmount: total,
+          status: "yangi_mijoz",
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || "Buyurtmani saqlab bo'lmadi");
+      setStep("done");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Xatolik yuz berdi");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -81,10 +113,10 @@ export function OrderModal({ product, onClose, user }: Props) {
           <div style={{ textAlign: "center", padding: "20px 0" }}>
             <div style={{ fontSize: 56, marginBottom: 16 }}>✅</div>
             <h2 style={{ fontFamily: "var(--font-jakarta)", fontSize: 22, fontWeight: 800, color: "var(--fg)", marginBottom: 8 }}>
-              Buyurtma qabul qilindi!
+              {t("om_done_title")}
             </h2>
             <p style={{ color: "var(--muted)", fontSize: 15, lineHeight: 1.6 }}>
-              Tez orada operator siz bilan bog&apos;lanadi.
+              {t("om_done_desc")}
             </p>
             <button
               onClick={onClose}
@@ -102,7 +134,7 @@ export function OrderModal({ product, onClose, user }: Props) {
                 cursor: "pointer",
               }}
             >
-              Yopish
+              {t("om_close")}
             </button>
           </div>
         ) : (
@@ -111,7 +143,7 @@ export function OrderModal({ product, onClose, user }: Props) {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
               <div>
                 <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4, textTransform: "uppercase", letterSpacing: 1 }}>
-                  Buyurtma berish
+                  {t("om_order_title")}
                 </p>
                 <h2 style={{ fontFamily: "var(--font-jakarta)", fontSize: 20, fontWeight: 800, color: "var(--fg)" }}>
                   {product.name}
@@ -162,9 +194,9 @@ export function OrderModal({ product, onClose, user }: Props) {
                 {/* Customer type */}
                 {!user && (
                   <div>
-                    <label style={labelStyle}>Mijoz turi</label>
+                    <label style={labelStyle}>{t("om_customer_type")}</label>
                     <div style={{ display: "flex", gap: 8 }}>
-                      {[["individual", "👤 Oddiy mijoz"], ["shop", "🏪 Do'kon"]].map(([val, lbl]) => (
+                      {[["individual", t("om_type_individual")], ["shop", t("om_type_shop")]].map(([val, lbl]) => (
                         <button
                           key={val}
                           onClick={() => setCustomerType(val as "individual" | "shop")}
@@ -190,16 +222,16 @@ export function OrderModal({ product, onClose, user }: Props) {
                 {!user && (
                   <>
                     <div>
-                      <label style={labelStyle}>Ismingiz</label>
+                      <label style={labelStyle}>{t("om_name")}</label>
                       <input
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="To'liq ismingiz"
+                        placeholder={t("om_name_ph")}
                         style={inputStyle}
                       />
                     </div>
                     <div>
-                      <label style={labelStyle}>Telefon raqam</label>
+                      <label style={labelStyle}>{t("om_phone")}</label>
                       <input
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
@@ -212,7 +244,7 @@ export function OrderModal({ product, onClose, user }: Props) {
 
                 {/* Quantity */}
                 <div>
-                  <label style={labelStyle}>Miqdor ({product.unit})</label>
+                  <label style={labelStyle}>{t("om_qty")} ({product.unit})</label>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <button
                       onClick={() => setQty(Math.max(product.minOrder ?? 1, (qty ?? 1) - 1))}
@@ -239,7 +271,7 @@ export function OrderModal({ product, onClose, user }: Props) {
                     alignItems: "center",
                   }}
                 >
-                  <span style={{ color: "var(--muted)", fontSize: 14 }}>Jami summa</span>
+                  <span style={{ color: "var(--muted)", fontSize: 14 }}>{t("om_total")}</span>
                   <span style={{ color: "var(--accent)", fontWeight: 800, fontSize: 18 }}>
                     {total.toLocaleString()} so&apos;m
                   </span>
@@ -252,7 +284,7 @@ export function OrderModal({ product, onClose, user }: Props) {
                   }}
                   style={primaryBtnStyle}
                 >
-                  Davom etish →
+                  {t("om_continue")}
                 </button>
               </div>
             )}
@@ -260,9 +292,9 @@ export function OrderModal({ product, onClose, user }: Props) {
             {step === "map" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>
-                  <label style={labelStyle}>Yetkazib berish manzili</label>
+                  <label style={labelStyle}>{t("om_address_title")}</label>
                   <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 10 }}>
-                    Xaritada o&apos;z manzilingizni bosing
+                    {t("om_address_desc")}
                   </p>
                   <LocationMap
                     onSelect={(lat, lng, address) => setLocation({ lat, lng, address })}
@@ -290,14 +322,14 @@ export function OrderModal({ product, onClose, user }: Props) {
                     onClick={() => setStep("info")}
                     style={{ ...primaryBtnStyle, background: "var(--surface-2)", color: "var(--fg)", flex: 1 }}
                   >
-                    ← Orqaga
+                    {t("om_back")}
                   </button>
                   <button
                     onClick={() => location && setStep("confirm")}
                     disabled={!location}
                     style={{ ...primaryBtnStyle, flex: 2, opacity: location ? 1 : 0.4 }}
                   >
-                    Tasdiqlash →
+                    {t("om_confirm")}
                   </button>
                 </div>
               </div>
@@ -306,16 +338,16 @@ export function OrderModal({ product, onClose, user }: Props) {
             {step === "confirm" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: 16, fontWeight: 700, color: "var(--fg)" }}>
-                  Buyurtmani tasdiqlang
+                  {t("om_confirm_title")}
                 </h3>
 
                 {[
-                  ["Mahsulot", product.name],
-                  ["Miqdor", `${qty} ${product.unit}`],
-                  ["Summa", `${total.toLocaleString()} so'm`],
-                  ["Ism", name || user?.name || "—"],
-                  ["Telefon", phone || user?.phone || "—"],
-                  ["Manzil", location?.address?.slice(0, 60) + "..." || "—"],
+                  [t("om_product"), product.name],
+                  [t("om_qty"), `${qty} ${product.unit}`],
+                  [t("om_amount"), `${total.toLocaleString()} so'm`],
+                  [t("om_name"), name || user?.name || "—"],
+                  [t("om_phone"), phone || user?.phone || "—"],
+                  [t("om_address_label"), location?.address?.slice(0, 60) + "..." || "—"],
                 ].map(([lbl, val]) => (
                   <div
                     key={lbl}
@@ -331,19 +363,25 @@ export function OrderModal({ product, onClose, user }: Props) {
                   </div>
                 ))}
 
+                {error && (
+                  <div style={{ padding: "10px 14px", borderRadius: 10, background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.3)", color: "var(--red)", fontSize: 13 }}>
+                    ⚠️ {error}
+                  </div>
+                )}
+
                 <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
                   <button
                     onClick={() => setStep("map")}
                     style={{ ...primaryBtnStyle, background: "var(--surface-2)", color: "var(--fg)", flex: 1 }}
                   >
-                    ← Orqaga
+                    {t("om_back")}
                   </button>
                   <button
                     onClick={handleSubmit}
                     disabled={submitting}
                     style={{ ...primaryBtnStyle, flex: 2, opacity: submitting ? 0.7 : 1 }}
                   >
-                    {submitting ? "Yuborilmoqda..." : "✓ Buyurtma berish"}
+                    {submitting ? t("om_submitting") : t("om_submit")}
                   </button>
                 </div>
               </div>

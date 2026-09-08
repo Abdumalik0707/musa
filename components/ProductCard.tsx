@@ -2,16 +2,29 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/lib/data";
 import { OrderModal } from "./OrderModal";
+import { useLanguage } from "@/lib/i18n";
 
 interface Props {
   product: Product;
   user?: { name: string; phone: string; type: string } | null;
+  isLoggedIn?: boolean;
 }
 
-export function ProductCard({ product, user }: Props) {
+export function ProductCard({ product, user, isLoggedIn }: Props) {
+  const router = useRouter();
+  const { t } = useLanguage();
   const [ordering, setOrdering] = useState(false);
+
+  function handleOrderClick() {
+    if (!isLoggedIn) {
+      router.push("/auth/register");
+      return;
+    }
+    setOrdering(true);
+  }
 
   return (
     <>
@@ -130,7 +143,7 @@ export function ProductCard({ product, user }: Props) {
           {/* Buttons */}
           <div style={{ display: "flex", gap: 6 }}>
             <button
-              onClick={() => setOrdering(true)}
+              onClick={handleOrderClick}
               style={{
                 flex: 2,
                 padding: "9px 0",
@@ -143,7 +156,7 @@ export function ProductCard({ product, user }: Props) {
                 cursor: "pointer",
               }}
             >
-              Buyurtma
+              {t("order_btn")}
             </button>
             <Link
               href={`/products/${product.id}`}
@@ -160,7 +173,7 @@ export function ProductCard({ product, user }: Props) {
                 textAlign: "center",
               }}
             >
-              Ko&apos;rish
+              {t("view_btn")}
             </Link>
           </div>
         </div>

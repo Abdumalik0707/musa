@@ -5,15 +5,22 @@ import User from "@/models/User";
 
 export async function POST(req: NextRequest) {
   try {
-    const { phone, password } = await req.json();
+    const { phone, password, username } = await req.json();
 
-    if (!phone || !password) {
-      return NextResponse.json({ error: "Telefon va parolni kiriting" }, { status: 400 });
+    if ((!phone && !username) || !password) {
+      return NextResponse.json({ error: "Telefon/Username va parolni kiriting" }, { status: 400 });
     }
 
     await connectDB();
 
-    const user = await User.findOne({ phone });
+    // Admin uchun username bilan kirish
+    let user;
+    if (username) {
+      user = await User.findOne({ username });
+    } else {
+      user = await User.findOne({ phone });
+    }
+
     if (!user) {
       return NextResponse.json({ error: "Foydalanuvchi topilmadi" }, { status: 404 });
     }
@@ -29,6 +36,7 @@ export async function POST(req: NextRequest) {
         id: user._id,
         name: user.name,
         phone: user.phone,
+        username: user.username,
         type: user.type,
         shopName: user.shopName,
         isAdmin: user.isAdmin,

@@ -227,7 +227,7 @@ export default function ProductPage() {
             {/* Actions */}
             <div style={{ display: "flex", gap: 10 }}>
               <button
-                onClick={() => setOrdering(true)}
+                onClick={() => (currentUser ? setOrdering(true) : router.push("/auth/register"))}
                 style={{
                   flex: 2,
                   padding: "15px",

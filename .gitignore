@@ -31,3 +31,5 @@ Thumbs.db
 
 # Product images (large files - add separately if needed)
 # public/products/
+
+.vercel

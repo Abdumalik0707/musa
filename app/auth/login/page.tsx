@@ -18,17 +18,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Admin demo login
-      if (phone === "admin" && pass === "admin123") {
-        localStorage.setItem("musa_user", JSON.stringify({ name: "Admin", phone: "admin", isAdmin: true }));
-        router.push("/admin");
-        return;
-      }
+      // Username yoki telefon orqali kirish
+      const isUsername = !phone.startsWith("+");
 
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, password: pass }),
+        body: JSON.stringify(
+          isUsername
+            ? { username: phone, password: pass }
+            : { phone, password: pass }
+        ),
       });
 
       const data = await res.json();
@@ -40,7 +40,7 @@ export default function LoginPage() {
 
       localStorage.setItem("musa_user", JSON.stringify(data.user));
 
-      if (data.user.isAdmin) {
+      if (data.user.isAdmin || data.user.type === "admin") {
         router.push("/admin");
       } else {
         router.push("/");
@@ -97,14 +97,14 @@ export default function LoginPage() {
           >
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
-                <label style={labelStyle}>Telefon raqam</label>
+                <label style={labelStyle}>Telefon raqam yoki Username</label>
                 <input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+998 90 000 00 00"
+                  placeholder="admin yoki +998 90 000 00 00"
                   style={inputStyle}
                   required
-                  autoComplete="tel"
+                  autoComplete="username"
                 />
               </div>
 
