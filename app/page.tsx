@@ -44,6 +44,9 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <div style={{ textAlign: "center", padding: "10px", background: "var(--accent)", color: "#fff", fontWeight: 700, fontSize: 14 }}>
+        Salom 👋
+      </div>
       <Navbar />
 
       {/* Hero */}
