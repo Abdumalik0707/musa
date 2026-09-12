@@ -171,24 +171,61 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section style={{ padding: "72px 24px 40px" }}>
+      <section id="qanday" style={{ padding: "72px 24px 40px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <h2 style={{ fontFamily: "var(--font-jakarta)", fontSize: "clamp(20px, 3vw, 30px)", fontWeight: 800, textAlign: "center", color: "var(--fg)", marginBottom: 28 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", textAlign: "center", marginBottom: 8 }}>
+            {t("catalog_label")}
+          </p>
+          <h2 style={{ fontFamily: "var(--font-jakarta)", fontSize: "clamp(20px, 3vw, 30px)", fontWeight: 800, textAlign: "center", color: "var(--fg)", marginBottom: 44 }}>
             {t("how_title")}
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }} data-how-grid>
-            {[
-              ["1️⃣", t("how_1_title"), t("how_1_desc")],
-              ["2️⃣", t("how_2_title"), t("how_2_desc")],
-              ["3️⃣", t("how_3_title"), t("how_3_desc")],
-              ["4️⃣", t("how_4_title"), t("how_4_desc")],
-            ].map(([icon, title, desc]) => (
-              <div key={title} style={{ padding: "18px 16px", borderRadius: 16, background: "var(--surface)", border: "1px solid var(--border)", textAlign: "center" }}>
-                <div style={{ fontSize: 24, marginBottom: 8 }}>{icon}</div>
-                <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: 14, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>{title}</h3>
-                <p style={{ color: "var(--muted)", fontSize: 12.5, lineHeight: 1.5 }}>{desc}</p>
-              </div>
-            ))}
+
+          <div style={{ position: "relative" }} data-how-grid-wrap>
+            {/* Connecting line (desktop only) */}
+            <div
+              data-how-line
+              style={{
+                position: "absolute",
+                top: 22,
+                left: "12.5%",
+                right: "12.5%",
+                height: 2,
+                background: "var(--border)",
+                zIndex: 0,
+              }}
+            />
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, position: "relative", zIndex: 1 }} data-how-grid>
+              {[
+                [t("how_1_title"), t("how_1_desc")],
+                [t("how_2_title"), t("how_2_desc")],
+                [t("how_3_title"), t("how_3_desc")],
+                [t("how_4_title"), t("how_4_desc")],
+              ].map(([title, desc], i) => (
+                <div key={title} style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: "50%",
+                      background: "var(--accent)",
+                      color: "#fff",
+                      display: "grid",
+                      placeItems: "center",
+                      fontFamily: "var(--font-jakarta)",
+                      fontWeight: 800,
+                      fontSize: 17,
+                      margin: "0 auto 16px",
+                      boxShadow: "0 8px 20px -6px rgba(255,107,53,0.55)",
+                    }}
+                  >
+                    {i + 1}
+                  </div>
+                  <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>{title}</h3>
+                  <p style={{ color: "var(--muted)", fontSize: 13, lineHeight: 1.5, maxWidth: 200, margin: "0 auto" }}>{desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -360,7 +397,8 @@ export default function Home() {
       <style>{`
         @media (max-width: 860px) {
           [data-stats-grid] { grid-template-columns: repeat(2, 1fr) !important; margin-inline: 0 !important; margin-top: 20px !important; }
-          [data-how-grid] { grid-template-columns: repeat(2, 1fr) !important; }
+          [data-how-grid] { grid-template-columns: repeat(2, 1fr) !important; gap: 28px 16px !important; }
+          [data-how-line] { display: none !important; }
           [data-story-grid] { grid-template-columns: 1fr !important; }
         }
       `}</style>
