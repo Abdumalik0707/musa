@@ -50,20 +50,23 @@ export default function Home() {
       <section style={{ maxWidth: 1300, margin: "0 auto", padding: "32px 24px 0" }}>
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            alignItems: "center",
-            gap: 32,
             background: "var(--surface)",
             border: "1px solid var(--border)",
             borderRadius: 28,
             padding: "28px",
             overflow: "hidden",
           }}
-          data-hero-grid
         >
-          {/* Text column */}
-          <div>
+          {/* Banner image — full width, uncropped */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-banner.png"
+            alt="Muzqaymoq — hayotingizga shirin lahza"
+            style={{ width: "100%", height: "auto", borderRadius: 20, display: "block", marginBottom: 28 }}
+          />
+
+          {/* Text below banner */}
+          <div style={{ textAlign: "center" }}>
             <div
               style={{
                 display: "inline-flex",
@@ -96,11 +99,11 @@ export default function Home() {
               <br />{t("hero_title_3")}
             </h1>
 
-            <p style={{ color: "var(--muted)", fontSize: 16, maxWidth: 440, margin: "0 0 24px", lineHeight: 1.6 }}>
+            <p style={{ color: "var(--muted)", fontSize: 16, maxWidth: 440, margin: "0 auto 24px", lineHeight: 1.6 }}>
               {t("hero_desc")}
             </p>
 
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
               <a
                 href="#mahsulotlar"
                 style={{
@@ -132,14 +135,6 @@ export default function Home() {
               </a>
             </div>
           </div>
-
-          {/* Image column */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero-banner.png"
-            alt="Muzqaymoq — hayotingizga shirin lahza"
-            style={{ width: "100%", height: "100%", maxHeight: 360, objectFit: "cover", borderRadius: 20, display: "block" }}
-          />
         </div>
 
         {/* Stats bar */}
@@ -285,7 +280,6 @@ export default function Home() {
 
       <style>{`
         @media (max-width: 860px) {
-          [data-hero-grid] { grid-template-columns: 1fr !important; }
           [data-stats-grid] { grid-template-columns: repeat(2, 1fr) !important; margin-inline: 0 !important; margin-top: 20px !important; }
           [data-how-grid] { grid-template-columns: repeat(2, 1fr) !important; }
         }
