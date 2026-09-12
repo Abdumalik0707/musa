@@ -46,8 +46,18 @@ export default function Home() {
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
       <Navbar />
 
+      {/* Hero banner image */}
+      <section style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 24px 0" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/hero-banner.png"
+          alt="Muzqaymoq — hayotingizga shirin lahza"
+          style={{ width: "100%", height: "auto", borderRadius: 24, display: "block" }}
+        />
+      </section>
+
       {/* Hero */}
-      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "72px 24px 48px", textAlign: "center" }}>
+      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 24px 48px", textAlign: "center" }}>
         <div
           style={{
             display: "inline-flex",
