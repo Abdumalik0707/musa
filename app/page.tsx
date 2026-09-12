@@ -46,88 +46,120 @@ export default function Home() {
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
       <Navbar />
 
-      {/* Hero banner image */}
-      <section style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 24px 0" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/hero-banner.png"
-          alt="Muzqaymoq — hayotingizga shirin lahza"
-          style={{ width: "100%", height: "auto", borderRadius: 24, display: "block" }}
-        />
-      </section>
-
       {/* Hero */}
-      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 24px 48px", textAlign: "center" }}>
+      <section style={{ maxWidth: 1300, margin: "0 auto", padding: "32px 24px 0" }}>
         <div
           style={{
-            display: "inline-flex",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
             alignItems: "center",
-            gap: 8,
-            background: "var(--accent-bg)",
-            color: "var(--accent-text)",
-            padding: "6px 16px",
-            borderRadius: 20,
-            fontSize: 13,
-            fontWeight: 600,
-            marginBottom: 24,
+            gap: 32,
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            borderRadius: 28,
+            padding: "28px",
+            overflow: "hidden",
           }}
+          data-hero-grid
         >
-          {t("hero_badge")}
+          {/* Text column */}
+          <div>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "var(--accent-bg)",
+                color: "var(--accent-text)",
+                padding: "6px 16px",
+                borderRadius: 20,
+                fontSize: 13,
+                fontWeight: 600,
+                marginBottom: 18,
+              }}
+            >
+              {t("hero_badge")}
+            </div>
+
+            <h1
+              style={{
+                fontFamily: "var(--font-jakarta)",
+                fontSize: "clamp(28px, 4.2vw, 48px)",
+                fontWeight: 900,
+                color: "var(--fg)",
+                lineHeight: 1.1,
+                letterSpacing: "-1.5px",
+                marginBottom: 16,
+              }}
+            >
+              {t("hero_title_1")} <span style={{ color: "var(--accent)" }}>{t("hero_title_2")}</span>
+              <br />{t("hero_title_3")}
+            </h1>
+
+            <p style={{ color: "var(--muted)", fontSize: 16, maxWidth: 440, margin: "0 0 24px", lineHeight: 1.6 }}>
+              {t("hero_desc")}
+            </p>
+
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <a
+                href="#mahsulotlar"
+                style={{
+                  padding: "13px 28px",
+                  borderRadius: 24,
+                  background: "var(--accent)",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: 15,
+                  textDecoration: "none",
+                }}
+              >
+                {t("hero_cta_catalog")}
+              </a>
+              <a
+                href={`tel:${OPERATOR.phone.replace(/\s/g, "")}`}
+                style={{
+                  padding: "13px 28px",
+                  borderRadius: 24,
+                  background: "var(--surface-2)",
+                  color: "var(--fg)",
+                  fontWeight: 600,
+                  fontSize: 15,
+                  textDecoration: "none",
+                  border: "1px solid var(--border-strong)",
+                }}
+              >
+                📞 {OPERATOR.phone}
+              </a>
+            </div>
+          </div>
+
+          {/* Image column */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-banner.png"
+            alt="Muzqaymoq — hayotingizga shirin lahza"
+            style={{ width: "100%", height: "100%", maxHeight: 360, objectFit: "cover", borderRadius: 20, display: "block" }}
+          />
         </div>
 
-        <h1
+        {/* Stats bar */}
+        <div
           style={{
-            fontFamily: "var(--font-jakarta)",
-            fontSize: "clamp(34px, 6vw, 66px)",
-            fontWeight: 900,
-            color: "var(--fg)",
-            lineHeight: 1.1,
-            letterSpacing: "-2px",
-            marginBottom: 20,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 16,
+            marginTop: -28,
+            marginInline: 20,
+            position: "relative",
+            zIndex: 2,
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            borderRadius: 18,
+            padding: "18px 12px",
+            boxShadow: "var(--shadow)",
           }}
+          data-stats-grid
         >
-          {t("hero_title_1")} <span style={{ color: "var(--accent)" }}>{t("hero_title_2")}</span>
-          <br />{t("hero_title_3")}
-        </h1>
-
-        <p style={{ color: "var(--muted)", fontSize: 18, maxWidth: 520, margin: "0 auto 36px", lineHeight: 1.6 }}>
-          {t("hero_desc")}
-        </p>
-
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a
-            href="#mahsulotlar"
-            style={{
-              padding: "14px 32px",
-              borderRadius: 24,
-              background: "var(--accent)",
-              color: "#fff",
-              fontWeight: 700,
-              fontSize: 16,
-              textDecoration: "none",
-            }}
-          >
-            {t("hero_cta_catalog")}
-          </a>
-          <a
-            href={`tel:${OPERATOR.phone.replace(/\s/g, "")}`}
-            style={{
-              padding: "14px 32px",
-              borderRadius: 24,
-              background: "var(--surface-2)",
-              color: "var(--fg)",
-              fontWeight: 600,
-              fontSize: 16,
-              textDecoration: "none",
-              border: "1px solid var(--border-strong)",
-            }}
-          >
-            📞 {OPERATOR.phone}
-          </a>
-        </div>
-
-        {/* Stats */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 40, marginTop: 52, flexWrap: "wrap" }}>
           {[
             ["🍦", `${PRODUCTS.filter(p => p.category === "muzqaymoq").length}+`, t("stat_flavors")],
             ["🥟", `${PRODUCTS.filter(p => p.category === "ovqat").length}+`, t("stat_food")],
@@ -135,31 +167,31 @@ export default function Home() {
             ["⚡", "60 min", t("stat_delivery")],
           ].map(([icon, val, lbl]) => (
             <div key={lbl} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 24, marginBottom: 4 }}>{icon}</div>
-              <div style={{ fontFamily: "var(--font-jakarta)", fontSize: 22, fontWeight: 800, color: "var(--fg)" }}>{val}</div>
-              <div style={{ color: "var(--muted)", fontSize: 13 }}>{lbl}</div>
+              <div style={{ fontSize: 20, marginBottom: 4 }}>{icon}</div>
+              <div style={{ fontFamily: "var(--font-jakarta)", fontSize: 18, fontWeight: 800, color: "var(--fg)" }}>{val}</div>
+              <div style={{ color: "var(--muted)", fontSize: 11.5 }}>{lbl}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* How it works */}
-      <section style={{ background: "var(--surface)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "56px 24px" }}>
+      <section style={{ padding: "72px 24px 40px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <h2 style={{ fontFamily: "var(--font-jakarta)", fontSize: "clamp(20px, 3vw, 30px)", fontWeight: 800, textAlign: "center", color: "var(--fg)", marginBottom: 36 }}>
+          <h2 style={{ fontFamily: "var(--font-jakarta)", fontSize: "clamp(20px, 3vw, 30px)", fontWeight: 800, textAlign: "center", color: "var(--fg)", marginBottom: 28 }}>
             {t("how_title")}
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }} data-how-grid>
             {[
               ["1️⃣", t("how_1_title"), t("how_1_desc")],
               ["2️⃣", t("how_2_title"), t("how_2_desc")],
               ["3️⃣", t("how_3_title"), t("how_3_desc")],
               ["4️⃣", t("how_4_title"), t("how_4_desc")],
             ].map(([icon, title, desc]) => (
-              <div key={title} style={{ padding: "22px", borderRadius: 18, background: "var(--bg-2)", border: "1px solid var(--border)", textAlign: "center" }}>
-                <div style={{ fontSize: 30, marginBottom: 10 }}>{icon}</div>
-                <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>{title}</h3>
-                <p style={{ color: "var(--muted)", fontSize: 13, lineHeight: 1.5 }}>{desc}</p>
+              <div key={title} style={{ padding: "18px 16px", borderRadius: 16, background: "var(--surface)", border: "1px solid var(--border)", textAlign: "center" }}>
+                <div style={{ fontSize: 24, marginBottom: 8 }}>{icon}</div>
+                <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: 14, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>{title}</h3>
+                <p style={{ color: "var(--muted)", fontSize: 12.5, lineHeight: 1.5 }}>{desc}</p>
               </div>
             ))}
           </div>
@@ -210,7 +242,7 @@ export default function Home() {
         </div>
 
         {/* Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: 18 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: 14 }}>
           {filtered.map((p) => (
             <ProductCard key={p.id} product={p} user={currentUser} isLoggedIn={isLoggedIn} />
           ))}
@@ -250,6 +282,14 @@ export default function Home() {
       <footer style={{ borderTop: "1px solid var(--border)", padding: "28px 24px", textAlign: "center", color: "var(--muted)", fontSize: 13 }}>
         © 2026 {OPERATOR.name} · {OPERATOR.website}
       </footer>
+
+      <style>{`
+        @media (max-width: 860px) {
+          [data-hero-grid] { grid-template-columns: 1fr !important; }
+          [data-stats-grid] { grid-template-columns: repeat(2, 1fr) !important; margin-inline: 0 !important; margin-top: 20px !important; }
+          [data-how-grid] { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+      `}</style>
     </div>
   );
 }
