@@ -243,6 +243,10 @@ export function Navbar() {
             fontSize: 18,
             color: "var(--fg)",
             cursor: "pointer",
+            display: "grid",
+            placeItems: "center",
+            lineHeight: 1,
+            flexShrink: 0,
           }}
         >
           {mobileOpen ? "✕" : "☰"}

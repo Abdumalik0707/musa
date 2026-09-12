@@ -37,6 +37,27 @@ export default function ProductPage() {
       <Navbar />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px" }}>
+        {/* Back button */}
+        <button
+          onClick={() => router.back()}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "9px 16px",
+            borderRadius: 20,
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            color: "var(--fg)",
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: "pointer",
+            marginBottom: 20,
+          }}
+        >
+          ← Orqaga
+        </button>
+
         {/* Breadcrumb */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 32, fontSize: 14, color: "var(--muted)" }}>
           <Link href="/" style={{ color: "var(--muted)", textDecoration: "none" }}>Bosh sahifa</Link>
@@ -46,7 +67,7 @@ export default function ProductPage() {
           <span style={{ color: "var(--fg)" }}>{product.name}</span>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
+        <div data-grid style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
           {/* Images */}
           <div>
             {/* Main image */}
