@@ -143,7 +143,7 @@ export default function Home() {
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
             gap: 16,
-            marginTop: -28,
+            marginTop: 24,
             marginInline: 20,
             position: "relative",
             zIndex: 2,
