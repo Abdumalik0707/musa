@@ -7,7 +7,7 @@ import { Navbar } from "@/components/Navbar";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+998 ");
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,17 +18,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Username yoki telefon orqali kirish
-      const isUsername = !phone.startsWith("+");
-
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          isUsername
-            ? { username: phone, password: pass }
-            : { phone, password: pass }
-        ),
+        body: JSON.stringify({ phone, password: pass }),
       });
 
       const data = await res.json();
@@ -97,14 +90,15 @@ export default function LoginPage() {
           >
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
-                <label style={labelStyle}>Telefon raqam yoki Username</label>
+                <label style={labelStyle}>Telefon raqam</label>
                 <input
+                  type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="admin yoki +998 90 000 00 00"
+                  placeholder="+998 90 000 00 00"
                   style={inputStyle}
                   required
-                  autoComplete="username"
+                  autoComplete="tel"
                 />
               </div>
 

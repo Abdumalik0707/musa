@@ -8,7 +8,7 @@ import { Navbar } from "@/components/Navbar";
 export default function RegisterPage() {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+998 ");
   const [pass, setPass] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
   const [type, setType] = useState<"individual" | "shop">("individual");

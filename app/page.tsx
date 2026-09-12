@@ -244,6 +244,85 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Story + Limited offer */}
+      <section style={{ maxWidth: 1300, margin: "0 auto", padding: "0 24px 60px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 20 }} data-story-grid>
+          {/* Our story */}
+          <div
+            style={{
+              position: "relative",
+              borderRadius: 24,
+              overflow: "hidden",
+              minHeight: 320,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/products/p10_img1.jpeg"
+              alt=""
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+            />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.05) 100%)" }} />
+            <div style={{ position: "relative", padding: "36px", maxWidth: 380 }}>
+              <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>
+                {t("story_label")}
+              </p>
+              <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 800, color: "#fff", marginBottom: 12, lineHeight: 1.25 }}>
+                {t("story_title")}
+              </h3>
+              <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
+                {t("story_desc")}
+              </p>
+              <a
+                href="#mahsulotlar"
+                style={{ display: "inline-block", padding: "11px 24px", borderRadius: 20, background: "#fff", color: "var(--fg)", fontWeight: 700, fontSize: 14, textDecoration: "none" }}
+              >
+                {t("story_btn")}
+              </a>
+            </div>
+          </div>
+
+          {/* Limited offer */}
+          <div
+            style={{
+              position: "relative",
+              borderRadius: 24,
+              overflow: "hidden",
+              minHeight: 320,
+              display: "flex",
+              alignItems: "center",
+              background: "linear-gradient(135deg, var(--accent-bg), var(--surface))",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/products/p11_img1.jpeg"
+              alt=""
+              style={{ position: "absolute", right: -20, bottom: -20, width: "58%", height: "70%", objectFit: "cover", borderRadius: 20, boxShadow: "var(--shadow)" }}
+            />
+            <div style={{ position: "relative", padding: "36px", maxWidth: 260 }}>
+              <p style={{ color: "var(--accent)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>
+                {t("offer_label")}
+              </p>
+              <h3 style={{ fontFamily: "var(--font-jakarta)", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 900, color: "var(--fg)", marginBottom: 10, lineHeight: 1.2 }}>
+                {t("offer_title")}
+              </h3>
+              <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 20 }}>
+                {t("offer_desc")}
+              </p>
+              <a
+                href="#mahsulotlar"
+                style={{ display: "inline-block", padding: "11px 24px", borderRadius: 20, background: "var(--accent)", color: "#fff", fontWeight: 700, fontSize: 14, textDecoration: "none" }}
+              >
+                {t("offer_btn")}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Operator CTA */}
       <section style={{ background: "var(--accent)", padding: "56px 24px", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
@@ -282,6 +361,7 @@ export default function Home() {
         @media (max-width: 860px) {
           [data-stats-grid] { grid-template-columns: repeat(2, 1fr) !important; margin-inline: 0 !important; margin-top: 20px !important; }
           [data-how-grid] { grid-template-columns: repeat(2, 1fr) !important; }
+          [data-story-grid] { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
