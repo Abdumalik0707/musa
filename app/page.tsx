@@ -156,15 +156,40 @@ export default function Home() {
           data-stats-grid
         >
           {[
-            ["🍦", `${PRODUCTS.filter(p => p.category === "muzqaymoq").length}+`, t("stat_flavors")],
-            ["🥟", `${PRODUCTS.filter(p => p.category === "ovqat").length}+`, t("stat_food")],
-            ["🌿", "4", t("stat_organic")],
-            ["⚡", "60 min", t("stat_delivery")],
-          ].map(([icon, val, lbl]) => (
-            <div key={lbl} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 20, marginBottom: 4 }}>{icon}</div>
-              <div style={{ fontFamily: "var(--font-jakarta)", fontSize: 18, fontWeight: 800, color: "var(--fg)" }}>{val}</div>
-              <div style={{ color: "var(--muted)", fontSize: 11.5 }}>{lbl}</div>
+            ["🍦", `${PRODUCTS.filter(p => p.category === "muzqaymoq").length}+`, t("stat_flavors"), "#ff6b35"],
+            ["🥟", `${PRODUCTS.filter(p => p.category === "ovqat").length}+`, t("stat_food"), "#d97706"],
+            ["🌿", "4", t("stat_organic"), "#16a34a"],
+            ["⚡", "60 min", t("stat_delivery"), "#2563eb"],
+          ].map(([icon, val, lbl, color], i) => (
+            <div
+              key={lbl}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "0 8px",
+                borderLeft: i === 0 ? "none" : "1px solid var(--border)",
+              }}
+              data-stat-item
+            >
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: `${color}18`,
+                  display: "grid",
+                  placeItems: "center",
+                  fontSize: 20,
+                  flexShrink: 0,
+                }}
+              >
+                {icon}
+              </div>
+              <div>
+                <div style={{ fontFamily: "var(--font-jakarta)", fontSize: 19, fontWeight: 800, color: "var(--fg)", lineHeight: 1.1 }}>{val}</div>
+                <div style={{ color: "var(--muted)", fontSize: 11.5, marginTop: 2 }}>{lbl}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -396,7 +421,10 @@ export default function Home() {
 
       <style>{`
         @media (max-width: 860px) {
-          [data-stats-grid] { grid-template-columns: repeat(2, 1fr) !important; margin-inline: 0 !important; margin-top: 20px !important; }
+          [data-stats-grid] { grid-template-columns: repeat(2, 1fr) !important; margin-inline: 0 !important; margin-top: 20px !important; row-gap: 20px !important; }
+          [data-stat-item]:nth-child(odd) { border-left: none !important; }
+          [data-stat-item]:nth-child(-n+2) { border-top: none !important; }
+          [data-stat-item]:nth-child(n+3) { border-top: 1px solid var(--border) !important; padding-top: 16px !important; }
           [data-how-grid] { grid-template-columns: repeat(2, 1fr) !important; gap: 28px 16px !important; }
           [data-how-line] { display: none !important; }
           [data-story-grid] { grid-template-columns: 1fr !important; }
